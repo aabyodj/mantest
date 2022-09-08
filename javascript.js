@@ -61,13 +61,42 @@ function collectFormValues(form) {
 		{});
 }
 
-function login(event) {
+function hideLoginError() {
+	let elem = document.getElementById('login-error');
+	if (elem != null) {
+		elem.remove();
+	}
+}
+
+function showLoginError() {
+	let elem = document.createElement('p');
+	elem.className = 'error';
+	elem.id = 'login-error';
+	elem.innerText = 'Login or password is incorrect';
+	let submitBtn = document.querySelector('#login-form button[type="submit"]');
+	submitBtn.insertAdjacentElement('beforeBegin', elem);
+	return elem;
+}
+
+async function login(event) {
 	event.preventDefault();
 	removeSignupMessage();
-	let login = document.getElementById('lf-login').value;
+	hideLoginError();
+	let loginForm = document.getElementById('login-form');
+	let credentials = collectFormValues(loginForm);
+	let response = await fetch('login.php', {
+		method: 'POST',
+		headers: {'Content-Type': 'application/json;charset=utf-8'},
+		body: JSON.stringify(credentials)
+	});
+	let result = await response.json();
+	if (!result.success) {
+		showLoginError();
+		return;
+	}
 	hideLoginForm();
-	document.getElementById('login-form').reset();	
-	document.querySelector('main').innerHTML = '<p>Hello ' + login + '</p><button id="logout-button" type="button">Log out</button>';
+	loginForm.reset();	
+	document.querySelector('main').innerHTML = '<p>Hello ' + result.name + '</p><button id="logout-button" type="button">Log out</button>';
 	document.getElementById('logout-button').addEventListener('click', logout);
 }
 
