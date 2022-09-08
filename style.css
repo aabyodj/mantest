@@ -28,13 +28,12 @@ label {
 	margin-right: .5rem;
 }
 
-form > p {
+form > * {
 	margin-top: 0;
 }
 
 form > ul {
 	list-style: none;
-	margin-top: 0;
 	padding: 0;
 }
 

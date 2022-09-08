@@ -35,6 +35,7 @@
 				or <a href="" id="signup-link">Sign up</a>
 			</form>
 			<form id="signup-form" method="POST" style="display: none">
+				<h1>Sign up</h1>
 				<p>The login is intentionally not checked for spaces because the task does not specify
 					that the login should not contain spaces.
 				<ul>
