@@ -111,7 +111,11 @@ function logout() {
 
 function showSignupErrors(errors) {
 	if (errors.login !== undefined) {
-		document.getElementById('sf-login').className = 'error';
+		if (errors.login !== true) {
+			createErrorHint('sf-login', errors.login);
+		} else {
+			document.getElementById('sf-login').className = 'error';			
+		}
 	}
 	if (errors.password !== undefined) {
 		document.getElementById('sf-password').className = 'error';	

@@ -24,7 +24,7 @@ class RepositoryJson implements Repository {
 			throw new Exception('Duplicate login');			
 		}
 		$email_index = json_decode(file_get_contents($this->email_index_file_name), true);
-		if (isset($email_index[$user->email])) {
+		if (isset($email_index[$user->getEmail()])) {
 			throw new Exception('Duplicate email');
 		}
 		$email_index[$user->getEmail()] = $login_hash;
