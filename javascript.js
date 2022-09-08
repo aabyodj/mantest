@@ -78,18 +78,22 @@ function showLoginError() {
 	return elem;
 }
 
+async function postJson(request, url) {
+	let response = await fetch(url, {
+		method: 'POST',
+		headers: {'Content-Type': 'application/json;charset=utf-8'},
+		body: JSON.stringify(request)
+	});
+	return await response.json();	
+}
+
 async function login(event) {
 	event.preventDefault();
 	removeSignupMessage();
 	hideLoginError();
 	let loginForm = document.getElementById('login-form');
 	let credentials = collectFormValues(loginForm);
-	let response = await fetch('login.php', {
-		method: 'POST',
-		headers: {'Content-Type': 'application/json;charset=utf-8'},
-		body: JSON.stringify(credentials)
-	});
-	let result = await response.json();
+	let result = await postJson(credentials, 'login.php');
 	if (!result.success) {
 		showLoginError();
 		return;
@@ -157,12 +161,7 @@ async function signup(event) {
 		showSignupErrors(result.errors);
 		return;
 	}
-	let response = await fetch('signup.php', {
-		method: 'POST',
-		headers: {'Content-Type': 'application/json;charset=utf-8'},
-		body: JSON.stringify(user)
-	});
-	result = await response.json();
+	result = await postJson(user, 'signup.php');
 	if (!result.success) {
 		showSignupErrors(result.errors);
 		return;
