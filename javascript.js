@@ -33,6 +33,25 @@ function showSignupMessage(user) {
 	container.insertBefore(message, container.children[0]);
 }
 
+function hideErrorHints(form) {
+	form.querySelectorAll('.error + .hint.dynamic').forEach(elem => {
+		elem.remove();
+	});
+	form.querySelectorAll('.error').forEach(elem => {
+		elem.className = '';
+	});
+}
+
+function createErrorHint(controlId, message) {
+	let elem = document.createElement('p');
+	elem.className = 'hint dynamic';
+	elem.innerText = message;
+	let control = document.getElementById(controlId);
+	control.insertAdjacentElement('afterend', elem);
+	control.className = 'error';
+	return elem;
+}
+
 function collectFormValues(form) {
 	return Object.values(form).reduce(
 		(obj, field) => { 
@@ -57,18 +76,68 @@ function logout() {
 	showLoginForm();
 }
 
+function showSignupErrors(errors) {
+	if (errors.login !== undefined) {
+		document.getElementById('sf-login').className = 'error';
+	}
+	if (errors.password !== undefined) {
+		document.getElementById('sf-password').className = 'error';	
+	}
+	if (errors.confirmPassword !== undefined) {
+		createErrorHint('sf-confirm-password', errors.confirmPassword);		
+	}
+	if (errors.email !== undefined) {
+		createErrorHint('sf-email', errors.email);
+	}
+	if (errors.name !== undefined) {
+		document.getElementById('sf-name').className = 'error';
+	}
+}
+
+function checkUser(user) {
+	let result = {success: true};
+	let errors = {};
+	const passwordPattern = /^[0-9]+[0-9a-z]*[a-z]+$|^[a-z]+[0-9a-z]*[0-9]+$/i;
+	if (!passwordPattern.test(user.password)) {
+		errors.password = 'Password must contain both and only digits and latin letters';
+		result.success = false;
+	}
+	if (user.password != user.confirm_password) {
+		errors.confirmPassword = 'Passwords don\'t match';
+		result.success = false;
+	}
+	const namePattern = /^[a-zа-я]+$/i;
+	if (!namePattern.test(user.name)) {
+		errors.name = 'Name must comprise only letters';
+		result.success = false;
+	}
+	if (!result.success) {
+		result.errors = errors;
+	}
+	return result;
+}
+
 async function signup(event) {
 	event.preventDefault();
 	removeSignupMessage();
 	let signupForm = document.getElementById('signup-form');
+	hideErrorHints(signupForm);
 	let user = collectFormValues(signupForm);
+	let result = checkUser(user);
+	if (!result.success) {
+		showSignupErrors(result.errors);
+		return;
+	}
 	let response = await fetch('signup.php', {
 		method: 'POST',
 		headers: {'Content-Type': 'application/json;charset=utf-8'},
 		body: JSON.stringify(user)
 	});
-	let result = await response.json();
-	console.log(result);
+	result = await response.json();
+	if (!result.success) {
+		showSignupErrors(result.errors);
+		return;
+	}
 	hideSignupForm();
 	signupForm.reset();
 	showSignupMessage(user);
