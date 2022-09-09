@@ -1,0 +1,5 @@
+
+RewriteEngine On
+RewriteRule (^|/)system(/|$) - [F]
+RewriteRule (^|/).git(/|$) - [F]
+RewriteRule .gitignore$ - [F]
