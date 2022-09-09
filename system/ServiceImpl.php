@@ -53,7 +53,7 @@ class ServiceImpl implements Service {
 				default:
 					throw $e;				
 			}
-			$e = new ServiceException($e->getMessage(), $e);
+			$e = new ServiceException($e->getMessage(), 0, $e);
 			$e->setErrors((object) $errors);
 			throw $e;
 		}
