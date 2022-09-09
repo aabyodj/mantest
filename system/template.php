@@ -10,6 +10,7 @@
 	<body>
 		<header>
 			<h1>Manao test</h1>
+			<p>The task is <a href="https://docs.google.com/document/d/1JIRIzYE2xmrPrG6vrbSpDF2FIUNng_J5Gv4GewluB3o/">here</a>
 		</header>
 		<main>
 			<?php if (isset($_SESSION['user'])): ?>
