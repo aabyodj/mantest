@@ -35,8 +35,8 @@ function escapeHTML(html) {
 function showSignupMessage(user) {
 	removeSignupMessage();
 	let message = document.createElement("p");
-	message.innerHTML = 'Successfully signed up user <b>' + user.name 
-		+ '</b> with login <b>' + escapeHTML(user.login) + '</b>';
+	message.innerHTML = 'Successfully signed up user "<b>' + user.name 
+		+ '</b>" with login "<b style="white-space:pre">' + escapeHTML(user.login) + '</b>"';
 	message.className = 'success';
 	message.id = 'signup-message';
 	let container = document.querySelector('main + aside');
