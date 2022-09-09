@@ -98,9 +98,10 @@ async function login(event) {
 		showLoginError();
 		return;
 	}
+	let user = result.user;
 	hideLoginForm();
 	loginForm.reset();	
-	document.querySelector('main').innerHTML = '<p>Hello ' + result.name + '</p><button id="logout-button" type="button">Log out</button>';
+	document.querySelector('main').innerHTML = '<p>Hello ' + user.name + '</p><button id="logout-button" type="button">Log out</button>';
 	document.getElementById('logout-button').addEventListener('click', logout);
 }
 

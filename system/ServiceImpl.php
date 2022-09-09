@@ -4,6 +4,7 @@ require_once('const.php');
 require_once('Service.php');
 require_once('ServiceException.php');
 require_once('Repository.php');
+require_once('User.php');
 
 class ServiceImpl implements Service {
 	private const PASSWORD_REGEX = '/^[0-9]+[0-9a-z]*[a-z]+$|^[a-z]+[0-9a-z]*[0-9]+$/i';
@@ -13,10 +14,6 @@ class ServiceImpl implements Service {
 	
 	public function __construct(Repository $repository) {
 		$this->repository = $repository;
-	}
-		
-	function hashPassword(string $password): string {
-		return sha1(SALT . $password);
 	}
 		
 	public function createUser(object $userData) {		
@@ -38,7 +35,7 @@ class ServiceImpl implements Service {
 			$e->setErrors((object) $errors);
 			throw $e;
 		}
-		$userData->passwordHash = $this->hashPassword($userData->password);
+		$userData->passwordHash = crypt($userData->password, SALT);
 		$user = new User($userData);
 		try {
 			$this->repository->insert($user);		
@@ -57,5 +54,18 @@ class ServiceImpl implements Service {
 			$e->setErrors((object) $errors);
 			throw $e;
 		}
+	}	
+	
+	public function login(object $credentials): User {
+		$user = $this->repository->findByLogin($credentials->login);
+		$knownHash = $user != null ? $user->getPasswordHash() : '';
+		if (!password_verify($credentials->password, $knownHash) or null == $user) {
+			$e = new ServiceException('Login or password is incorrect');
+			$e->setErrors((object) ['login' => 'Login or password is incorrect']);
+			throw $e;
+		}
+		error_log(var_export($user, true));
+		$user->setPasswordHash('');
+		return $user;
 	}
 }
