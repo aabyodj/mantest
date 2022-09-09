@@ -9,6 +9,11 @@ try {
 	$credentials = json_decode(file_get_contents('php://input'));
 	$user = $service->login($credentials);
 	$result = ['success' => true, 'user' => $user];
+	$_SESSION = array();
+	setcookie(session_name(), '', time() - 42000);
+	session_destroy();
+	session_start();
+	$_SESSION['user'] = $user;
 } catch (ServiceException $e) {
 	$result['errors'] = $e->getErrors();
 }

@@ -12,8 +12,8 @@
 			<h1>Manao test</h1>
 		</header>
 		<main>
-			<?php if (isset($user_name)): ?>
-				<p>Hello <?php echo $user_name; ?></p>
+			<?php if (isset($_SESSION['user'])): ?>
+				<p>Hello <?php echo $_SESSION['user']->getName(); ?></p>
 				<button id="logout-button" type="button">Log out</button>
 			<?php else: ?>
 				<p>Hello! You are not logged in.

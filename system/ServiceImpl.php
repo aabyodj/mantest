@@ -64,7 +64,6 @@ class ServiceImpl implements Service {
 			$e->setErrors((object) ['login' => 'Login or password is incorrect']);
 			throw $e;
 		}
-		error_log(var_export($user, true));
 		$user->setPasswordHash('');
 		return $user;
 	}

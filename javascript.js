@@ -106,8 +106,7 @@ async function login(event) {
 }
 
 function logout() {
-	document.querySelector('main').innerHTML = '<p>Hello! You are not logged in.';
-	showLoginForm();
+	window.location.assign('logout.php');
 }
 
 function showSignupErrors(errors) {
