@@ -13,6 +13,7 @@ function showLoginForm() {
 
 function showSignupForm() {
 	hideLoginForm();
+	removeSignupMessage();
 	document.getElementById('signup-form').style.display = '';
 }
 
