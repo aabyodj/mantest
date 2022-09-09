@@ -173,6 +173,8 @@ async function signup(event) {
 	hideSignupForm();
 	signupForm.reset();
 	showSignupMessage(user);
+	document.getElementById('login-form').reset();
+	hideLoginError();
 	showLoginForm();
 }
 
