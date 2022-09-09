@@ -24,10 +24,19 @@ function removeSignupMessage() {
 	}	
 }
 
+function escapeHTML(html) {
+	let p = document.createElement('p');
+	p.textContent = html;
+	let result = p.innerHTML;
+	p.remove();
+	return result;
+}
+
 function showSignupMessage(user) {
 	removeSignupMessage();
 	let message = document.createElement("p");
-	message.innerHTML = 'Successfully signed up user <b>' + user.name + '</b> with login <b>' + user.login + '</b>';
+	message.innerHTML = 'Successfully signed up user <b>' + user.name 
+		+ '</b> with login <b>' + escapeHTML(user.login) + '</b>';
 	message.className = 'success';
 	message.id = 'signup-message';
 	let container = document.querySelector('main + aside');
