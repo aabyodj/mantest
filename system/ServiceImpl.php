@@ -16,7 +16,7 @@ class ServiceImpl implements Service {
 	}
 		
 	function hashPassword(string $password): string {
-		return sha1($password);
+		return sha1(SALT . $password);
 	}
 		
 	public function createUser(object $userData) {		
