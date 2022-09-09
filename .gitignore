@@ -1,2 +1,4 @@
+*.json
+
 # ignore Geany files
 *.geany
